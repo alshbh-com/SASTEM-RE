@@ -13,7 +13,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useState, useMemo, useEffect } from "react";
 import * as XLSX from "xlsx";
 import { useTheme } from "@/contexts/ThemeContext";
-import { generateBarcodeDataUrl } from "@/lib/barcodeUtils";
+import { generateBarcodeDataUrl, generateQrDataUrl } from "@/lib/barcodeUtils";
 
 
 const Invoices = () => {
