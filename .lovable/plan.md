@@ -1,86 +1,91 @@
-## نظام قراءة الباركود الشامل
+## الخطة الشاملة
 
-سأبني نظام Barcode/QR متكامل مع صفحة اسكان احترافية وأوامر جماعية وRealtime.
+المشروع يحتاج بناء كامل لقاعدة البيانات من الصفر (Supabase فارغ حالياً) + تعديلات على الكود. سأنفذها على 3 مراحل:
 
-### 1. قاعدة البيانات (Migration واحدة)
+---
 
-**تعديل جدول `orders`:**
-- `tracking_code` text unique - كود التتبع الفريد (مثل TRK-000123)
-- `barcode_value` text - قيمة الباركود
-- `qr_value` text - قيمة QR
+### المرحلة 1: قاعدة البيانات (Migration كبيرة واحدة)
 
-**Trigger:** عند إنشاء أوردر، يولّد `tracking_code` تلقائياً من `order_number` ويملأ `barcode_value` و `qr_value`.
+سأنشئ كل الجداول التي يستخدمها الكود حالياً، مع GRANTs و RLS و Triggers:
 
-**جدول `scan_sessions`:**
-- user_id, username, started_at, ended_at, total_scanned, status (active/completed)
+**جداول الإدارة والصلاحيات:**
+- `admin_users` (username, password, is_active)
+- `admin_user_permissions` (user_id, permission, permission_type)
+- `system_passwords` (id, password) — مع إدراج أولي: master/payment/admin_delete = `01278006248`
+- `app_settings` (platform_name, invoice_name, logo, watermark, theme... إلخ) — مع `Reflect` افتراضي
+- `activity_logs`
+- `analytics_events`, `statistics`
 
-**جدول `scan_session_items`:**
-- session_id, order_id, scanned_at
+**الجغرافيا والمكاتب:**
+- `governorates` (name, shipping_cost, agent_shipping_cost)
+- `offices` (name, logo, watermark, address, phone)
 
-**جدول `scan_logs`:**
-- user_id, username, order_id, action (scan/status_change/assign/...), old_value, new_value, session_id, created_at
+**المنتجات:**
+- `categories`
+- `products` (name, price, tier prices, category_id...)
+- `product_images`, `product_color_variants`
 
-**جدول `order_status_history`:**
-- order_id, old_status, new_status, changed_by, changed_by_username, notes, created_at
+**العملاء والطلبات:**
+- `customers` (phone فريد، name، address، governorate_id)
+- `orders` (order_number، tracking_code، barcode_value، qr_value، status، total، delivery_agent_id، assigned_at، payment_date، office_id...)
+- `order_items` (snapshot للأسعار والمنتجات، nullable product_id لحفظ التاريخ)
+- `returns`
 
-ملاحظة: `courier_daily_reports` و agent daily logic موجودة بالفعل عبر `agent_payments` + `agent_daily_closings` + الـ triggers الحالية، فلن أكررها.
+**المندوبين والمالية:**
+- `delivery_agents` (name, phone, is_active)
+- `agent_payments` (agent_id, order_id, amount, type, payment_date)
+- `agent_daily_closings`
+- `cashbox` + `cashbox_transactions`
+- `treasury`
 
-**Trigger إضافي:** عند تغيير `orders.status` يُسجَّل في `order_status_history` تلقائياً.
+**نظام الباركود (من plan.md):**
+- `scan_sessions`, `scan_session_items`, `scan_logs`
+- `order_status_history`
 
-**RLS:** كل الجداول الجديدة public access (نفس باقي النظام).
+**Triggers رئيسية:**
+- توليد `order_number` و `tracking_code` تلقائياً
+- عند تغيير `orders.status` → تسجيل في `order_status_history` + إنشاء/حذف `agent_payments` تلقائياً (لمنع الازدواج)
+- عند رجوع الطلب لـ Pending/Processing → تفريغ `delivery_agent_id`
+- إنشاء خزنة يومية صفرية تلقائياً
+- `update_updated_at_column` للجداول
 
-### 2. الكود
+**RLS:** كل الجداول قابلة للقراءة/الكتابة بدون auth (المشروع يستخدم نظام admin خاص عبر `system_passwords`).
 
-**مكتبات جديدة:** `jsbarcode`, `qrcode`, `react-qr-code`
+---
 
-**ملفات جديدة:**
-- `src/pages/admin/BarcodeScanner.tsx` - الصفحة الرئيسية
-- `src/components/admin/scanner/ScanInput.tsx` - الإنبوت المخصص للمسدس (auto-focus, blur prevention)
-- `src/components/admin/scanner/ScannedOrdersTable.tsx` - الجدول الحي
-- `src/components/admin/scanner/BulkActionsDialog.tsx` - نافذة الأوامر الجماعية
-- `src/components/admin/scanner/BarcodeLabel.tsx` - مكون لطباعة ملصق الباركود
-- `src/hooks/useBarcodeScanner.ts` - منطق الاسكان (debounce على Enter, prevent duplicates, validate status)
-- `src/hooks/useScanSession.ts` - إدارة الـ Session (start/end/persist)
-- `src/hooks/useOrdersRealtime.ts` - subscription على جدول orders
-- `src/lib/scanSounds.ts` - صوت نجاح/خطأ (Web Audio API، بدون ملفات)
-- `src/lib/barcodeUtils.ts` - توليد tracking code، جلب بالـ tracking/order_number/id
-- `src/lib/exportUtils.ts` - تصدير Excel (CSV) و PDF (jsPDF)
+### المرحلة 2: تغيير الاسم Family Fashion → Reflect
 
-**تعديلات:**
-- `src/App.tsx` - إضافة route `/admin/barcode-scanner`
-- `src/pages/admin/Dashboard.tsx` - إضافة كارت "قراءة الباركود" بـ permission جديد
-- `src/pages/admin/Invoices.tsx` - إضافة Barcode + QR + Tracking رقم في كل فاتورة
-- `src/contexts/AdminAuthContext.tsx` (إن وُجدت قائمة permissions) - إضافة `barcode_scanner`
+- `src/contexts/ThemeContext.tsx`: defaults → `Reflect`
+- `src/pages/admin/Dashboard.tsx`: النص الظاهر
+- `src/pages/admin/Appearance.tsx`: placeholders
+- `src/pages/admin/Orders.tsx`: شعار الفاتورة في الـ print template
+- إدراج `Reflect` كقيمة افتراضية في `app_settings`
 
-### 3. الأوامر الجماعية
+---
 
-داخل `BulkActionsDialog`:
-- تغيير الحالة (8 حالات): تحديث `orders.status` لكل الأوردرات. الـ DB triggers الحالية تتكفل بالـ agent payments والـ daily reports تلقائياً.
-- تعيين/إزالة مندوب: تحديث `delivery_agent_id`.
-- طباعة فواتير جماعية: فتح نافذة طباعة بكل الفواتير (إعادة استخدام منطق Invoices).
-- طباعة باركود جماعية: صفحة طباعة ملصقات.
-- تصدير PDF / Excel.
-- حذف من القائمة (محلي فقط).
+### المرحلة 3: كلمة المرور الرئيسية + شكل الفاتورة
 
-### 4. منع الأخطاء
+**كلمة المرور:**
+- `src/lib/adminAuth.ts`: تغيير `01013701405` → `01278006248`
+- إدراج `01278006248` لكل من master/payment/admin_delete في `system_passwords`
+- بحيث يمكن تغييرها لاحقاً من واجهة UserManagement
 
-- `Set` للـ tracking codes داخل الـ session لمنع التكرار.
-- رفض الأوردرات بحالة `cancelled` أو `delivered` (إلا لو اخترنا "السماح" صراحة).
-- صوت نجاح/خطأ + Toast.
-- التحقق من `currentUser` و permission قبل أي action.
+**شكل الفاتورة الجديد:**
+تصميم احترافي جديد لـ `Invoices.tsx` (وقالب الطباعة في `Orders.tsx`):
+- Header مع لوجو Reflect + معلومات المكتب
+- Barcode + QR + Tracking code بارزين
+- تصميم نظيف بألوان متناسقة (ذهبي/أسود أو حسب الـ theme)
+- جدول منتجات منسق
+- ملخص مالي واضح في الأسفل
+- ملاحظات وشروط
+- مناسب لطباعة A4 وأيضاً للحرارية
 
-### 5. Realtime
+---
 
-`supabase.channel('orders-changes').on('postgres_changes', ...)` على جدول `orders` لتحديث القائمة فوراً، وعلى `scan_session_items` لمشاركة الـ session بين الأجهزة.
+### ملاحظات
 
-### 6. UI
+1. الـ Migration ضخمة (≈ 25 جدول). سأرسلها كاملة في خطوة واحدة وتحتاج موافقتك.
+2. بعد تنفيذ الـ Migration، `types.ts` يتحدث تلقائياً ثم أكمل تعديلات الكود.
+3. لن ألمس البيانات الموجودة (لا توجد بيانات حالياً).
 
-- زر كبير "ابدأ الاسكان" (gradient).
-- بعد البدء: input ضخم auto-focus + counter + جدول حي.
-- زر "انتهيت" يفتح BulkActionsDialog.
-- RTL، dark mode (موجود)، animations عبر Tailwind، Toast (موجود).
-
-### الترتيب
-1. أعرض الـ Migration وأنتظر الموافقة.
-2. بعد الموافقة: تثبيت المكتبات + كتابة كل الكود.
-3. تحديث الفاتورة لإظهار Barcode/QR.
+هل أبدأ بإرسال الـ Migration؟
