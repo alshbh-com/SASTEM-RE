@@ -742,7 +742,8 @@ const Cart = () => {
                             <Label className="text-xs sm:text-sm font-semibold mb-1 block">اللون</Label>
                             {(() => {
                               const product = products?.find(p => p.id === item.id);
-                              return product?.color_options && product.color_options.length > 0 ? (
+                              const colorOpts = (product?.color_options as string[] | null) || [];
+                              return colorOpts.length > 0 ? (
                                 <Select
                                   value={item.color || ""}
                                   onValueChange={(value) => updateItemDetails(item.id, item.size, value)}
@@ -751,7 +752,7 @@ const Cart = () => {
                                     <SelectValue placeholder="اختر" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    {product.color_options.map((color) => (
+                                    {colorOpts.map((color: string) => (
                                       <SelectItem key={color} value={color}>{color}</SelectItem>
                                     ))}
                                   </SelectContent>
