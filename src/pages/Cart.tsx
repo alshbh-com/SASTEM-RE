@@ -723,7 +723,7 @@ const Cart = () => {
                                     <SelectValue placeholder="اختر" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    {product.size_options.map((size) => (
+                                    {sizeOpts.map((size: string) => (
                                       <SelectItem key={size} value={size}>{size}</SelectItem>
                                     ))}
                                   </SelectContent>
