@@ -713,7 +713,8 @@ const Cart = () => {
                             <Label className="text-xs sm:text-sm font-semibold mb-1 block">المقاس</Label>
                             {(() => {
                               const product = products?.find(p => p.id === item.id);
-                              return product?.size_options && product.size_options.length > 0 ? (
+                              const sizeOpts = (product?.size_options as string[] | null) || [];
+                              return sizeOpts.length > 0 ? (
                                 <Select
                                   value={item.size || ""}
                                   onValueChange={(value) => updateItemDetails(item.id, value, item.color)}
