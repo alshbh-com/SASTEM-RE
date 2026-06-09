@@ -483,6 +483,66 @@ export type Database = {
         }
         Relationships: []
       }
+      meta_event_logs: {
+        Row: {
+          created_at: string
+          custom_data: Json | null
+          event_id: string
+          event_name: string
+          http_status: number | null
+          id: string
+          message: string | null
+          source_url: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          custom_data?: Json | null
+          event_id: string
+          event_name: string
+          http_status?: number | null
+          id?: string
+          message?: string | null
+          source_url?: string | null
+          status: string
+        }
+        Update: {
+          created_at?: string
+          custom_data?: Json | null
+          event_id?: string
+          event_name?: string
+          http_status?: number | null
+          id?: string
+          message?: string | null
+          source_url?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
+      meta_settings: {
+        Row: {
+          access_token: string | null
+          id: string
+          pixel_id: string | null
+          test_event_code: string | null
+          updated_at: string
+        }
+        Insert: {
+          access_token?: string | null
+          id?: string
+          pixel_id?: string | null
+          test_event_code?: string | null
+          updated_at?: string
+        }
+        Update: {
+          access_token?: string | null
+          id?: string
+          pixel_id?: string | null
+          test_event_code?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       offices: {
         Row: {
           address: string | null
