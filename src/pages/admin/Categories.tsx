@@ -15,6 +15,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
+import { uploadImageToImgBB } from "@/lib/imageUpload";
 
 const Categories = () => {
   const navigate = useNavigate();
@@ -50,21 +51,8 @@ const Categories = () => {
   });
 
   const handleImageUpload = async (file: File): Promise<string> => {
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-    const filePath = `categories/${fileName}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from('products')
-      .upload(filePath, file);
-
-    if (uploadError) throw uploadError;
-
-    const { data } = supabase.storage
-      .from('products')
-      .getPublicUrl(filePath);
-
-    return data.publicUrl;
+    const result = await uploadImageToImgBB(file);
+    return result.display_url || result.url;
   };
 
   const createMutation = useMutation({
