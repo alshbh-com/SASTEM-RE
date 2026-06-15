@@ -109,6 +109,7 @@ export type Database = {
           balance: number | null
           closing_date: string
           created_at: string
+          delivery_agent_id: string | null
           id: string
           notes: string | null
           total_collected: number | null
@@ -119,6 +120,7 @@ export type Database = {
           balance?: number | null
           closing_date?: string
           created_at?: string
+          delivery_agent_id?: string | null
           id?: string
           notes?: string | null
           total_collected?: number | null
@@ -129,6 +131,7 @@ export type Database = {
           balance?: number | null
           closing_date?: string
           created_at?: string
+          delivery_agent_id?: string | null
           id?: string
           notes?: string | null
           total_collected?: number | null
@@ -142,6 +145,13 @@ export type Database = {
             referencedRelation: "delivery_agents"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "agent_daily_closings_delivery_agent_id_fkey"
+            columns: ["delivery_agent_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_agents"
+            referencedColumns: ["id"]
+          },
         ]
       }
       agent_payments: {
@@ -150,10 +160,12 @@ export type Database = {
           agent_shipping_cost: number | null
           amount: number
           created_at: string
+          delivery_agent_id: string | null
           id: string
           notes: string | null
           order_id: string | null
           payment_date: string | null
+          payment_type: string | null
           status: string | null
           type: string
         }
@@ -162,10 +174,12 @@ export type Database = {
           agent_shipping_cost?: number | null
           amount?: number
           created_at?: string
+          delivery_agent_id?: string | null
           id?: string
           notes?: string | null
           order_id?: string | null
           payment_date?: string | null
+          payment_type?: string | null
           status?: string | null
           type?: string
         }
@@ -174,10 +188,12 @@ export type Database = {
           agent_shipping_cost?: number | null
           amount?: number
           created_at?: string
+          delivery_agent_id?: string | null
           id?: string
           notes?: string | null
           order_id?: string | null
           payment_date?: string | null
+          payment_type?: string | null
           status?: string | null
           type?: string
         }
@@ -185,6 +201,13 @@ export type Database = {
           {
             foreignKeyName: "agent_payments_agent_id_fkey"
             columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_payments_delivery_agent_id_fkey"
+            columns: ["delivery_agent_id"]
             isOneToOne: false
             referencedRelation: "delivery_agents"
             referencedColumns: ["id"]
@@ -522,6 +545,7 @@ export type Database = {
           image_url: string | null
           order_id: string
           price: number
+          product_details: string | null
           product_id: string | null
           product_name: string
           quantity: number
@@ -535,6 +559,7 @@ export type Database = {
           image_url?: string | null
           order_id: string
           price?: number
+          product_details?: string | null
           product_id?: string | null
           product_name: string
           quantity?: number
@@ -548,6 +573,7 @@ export type Database = {
           image_url?: string | null
           order_id?: string
           price?: number
+          product_details?: string | null
           product_id?: string | null
           product_name?: string
           quantity?: number
@@ -597,6 +623,7 @@ export type Database = {
           status: string
           subtotal: number
           total: number
+          total_amount: number
           tracking_code: string | null
           updated_at: string
         }
@@ -625,6 +652,7 @@ export type Database = {
           status?: string
           subtotal?: number
           total?: number
+          total_amount?: number
           tracking_code?: string | null
           updated_at?: string
         }
@@ -653,6 +681,7 @@ export type Database = {
           status?: string
           subtotal?: number
           total?: number
+          total_amount?: number
           tracking_code?: string | null
           updated_at?: string
         }
@@ -760,6 +789,7 @@ export type Database = {
       products: {
         Row: {
           category_id: string | null
+          color_options: Json | null
           created_at: string
           description: string | null
           details: string | null
@@ -781,11 +811,14 @@ export type Database = {
           price_7: number | null
           price_8: number | null
           price_9: number | null
+          quantity_pricing: Json | null
+          size_options: Json | null
           stock: number
           updated_at: string
         }
         Insert: {
           category_id?: string | null
+          color_options?: Json | null
           created_at?: string
           description?: string | null
           details?: string | null
@@ -807,11 +840,14 @@ export type Database = {
           price_7?: number | null
           price_8?: number | null
           price_9?: number | null
+          quantity_pricing?: Json | null
+          size_options?: Json | null
           stock?: number
           updated_at?: string
         }
         Update: {
           category_id?: string | null
+          color_options?: Json | null
           created_at?: string
           description?: string | null
           details?: string | null
@@ -833,6 +869,8 @@ export type Database = {
           price_7?: number | null
           price_8?: number | null
           price_9?: number | null
+          quantity_pricing?: Json | null
+          size_options?: Json | null
           stock?: number
           updated_at?: string
         }
@@ -851,33 +889,49 @@ export type Database = {
           agent_id: string | null
           amount: number | null
           created_at: string
+          delivery_agent_id: string | null
           id: string
           order_id: string
           reason: string | null
+          return_amount: number | null
           returned_at: string
+          returned_items: Json | null
         }
         Insert: {
           agent_id?: string | null
           amount?: number | null
           created_at?: string
+          delivery_agent_id?: string | null
           id?: string
           order_id: string
           reason?: string | null
+          return_amount?: number | null
           returned_at?: string
+          returned_items?: Json | null
         }
         Update: {
           agent_id?: string | null
           amount?: number | null
           created_at?: string
+          delivery_agent_id?: string | null
           id?: string
           order_id?: string
           reason?: string | null
+          return_amount?: number | null
           returned_at?: string
+          returned_items?: Json | null
         }
         Relationships: [
           {
             foreignKeyName: "returns_agent_id_fkey"
             columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "returns_delivery_agent_id_fkey"
+            columns: ["delivery_agent_id"]
             isOneToOne: false
             referencedRelation: "delivery_agents"
             referencedColumns: ["id"]
@@ -1108,7 +1162,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      delete_old_activity_logs: { Args: never; Returns: number }
     }
     Enums: {
       [_ in never]: never
