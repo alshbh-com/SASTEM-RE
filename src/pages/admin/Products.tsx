@@ -77,22 +77,10 @@ const Products = () => {
     mutationFn: async (data: any) => {
       let imageUrl = data.image_url;
       
-      // Upload main image if provided
+      // Upload main image to imgBB if provided
       if (imageFile) {
-        const fileExt = imageFile.name.split('.').pop();
-        const fileName = `${Math.random()}.${fileExt}`;
-        
-        const { error: uploadError } = await supabase.storage
-          .from('products')
-          .upload(fileName, imageFile);
-        
-        if (uploadError) throw uploadError;
-        
-        const { data: { publicUrl } } = supabase.storage
-          .from('products')
-          .getPublicUrl(fileName);
-        
-        imageUrl = publicUrl;
+        const result = await uploadImageToImgBB(imageFile);
+        imageUrl = result.display_url || result.url;
       }
       
       const quantityPricing = data.quantity_pricing
