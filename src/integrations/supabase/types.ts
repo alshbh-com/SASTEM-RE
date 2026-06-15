@@ -111,6 +111,7 @@ export type Database = {
           created_at: string
           delivery_agent_id: string | null
           id: string
+          net_amount: number | null
           notes: string | null
           total_collected: number | null
           total_paid: number | null
@@ -122,6 +123,7 @@ export type Database = {
           created_at?: string
           delivery_agent_id?: string | null
           id?: string
+          net_amount?: number | null
           notes?: string | null
           total_collected?: number | null
           total_paid?: number | null
@@ -133,6 +135,7 @@ export type Database = {
           created_at?: string
           delivery_agent_id?: string | null
           id?: string
+          net_amount?: number | null
           notes?: string | null
           total_collected?: number | null
           total_paid?: number | null
@@ -445,6 +448,9 @@ export type Database = {
           is_active: boolean
           name: string
           phone: string | null
+          serial_number: string | null
+          total_owed: number | null
+          total_paid: number | null
           updated_at: string
         }
         Insert: {
@@ -453,6 +459,9 @@ export type Database = {
           is_active?: boolean
           name: string
           phone?: string | null
+          serial_number?: string | null
+          total_owed?: number | null
+          total_paid?: number | null
           updated_at?: string
         }
         Update: {
@@ -461,6 +470,9 @@ export type Database = {
           is_active?: boolean
           name?: string
           phone?: string | null
+          serial_number?: string | null
+          total_owed?: number | null
+          total_paid?: number | null
           updated_at?: string
         }
         Relationships: []
@@ -547,7 +559,7 @@ export type Database = {
           price: number
           product_details: string | null
           product_id: string | null
-          product_name: string
+          product_name: string | null
           quantity: number
           size: string | null
           variant_id: string | null
@@ -561,7 +573,7 @@ export type Database = {
           price?: number
           product_details?: string | null
           product_id?: string | null
-          product_name: string
+          product_name?: string | null
           quantity?: number
           size?: string | null
           variant_id?: string | null
@@ -575,7 +587,7 @@ export type Database = {
           price?: number
           product_details?: string | null
           product_id?: string | null
-          product_name?: string
+          product_name?: string | null
           quantity?: number
           size?: string | null
           variant_id?: string | null
@@ -611,6 +623,7 @@ export type Database = {
           customer_phone: string | null
           customer_phone2: string | null
           delivery_agent_id: string | null
+          discount: number | null
           governorate_id: string | null
           id: string
           notes: string | null
@@ -640,6 +653,7 @@ export type Database = {
           customer_phone?: string | null
           customer_phone2?: string | null
           delivery_agent_id?: string | null
+          discount?: number | null
           governorate_id?: string | null
           id?: string
           notes?: string | null
@@ -669,6 +683,7 @@ export type Database = {
           customer_phone?: string | null
           customer_phone2?: string | null
           delivery_agent_id?: string | null
+          discount?: number | null
           governorate_id?: string | null
           id?: string
           notes?: string | null

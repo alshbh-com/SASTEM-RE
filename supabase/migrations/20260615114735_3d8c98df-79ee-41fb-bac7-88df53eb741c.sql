@@ -1,0 +1,13 @@
+
+ALTER TABLE public.delivery_agents
+  ADD COLUMN IF NOT EXISTS total_owed NUMERIC DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS total_paid NUMERIC DEFAULT 0,
+  ADD COLUMN IF NOT EXISTS serial_number TEXT;
+
+ALTER TABLE public.agent_daily_closings
+  ADD COLUMN IF NOT EXISTS net_amount NUMERIC DEFAULT 0;
+
+ALTER TABLE public.orders
+  ADD COLUMN IF NOT EXISTS discount NUMERIC DEFAULT 0;
+
+ALTER TABLE public.order_items ALTER COLUMN product_name DROP NOT NULL;
