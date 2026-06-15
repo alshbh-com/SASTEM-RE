@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
+import { uploadImageToImgBB, uploadMultipleImagesToImgBB } from "@/lib/imageUpload";
 
 const Products = () => {
   const navigate = useNavigate();
