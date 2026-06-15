@@ -1,0 +1,1 @@
+ALTER TABLE public.agent_daily_closings ALTER COLUMN agent_id DROP NOT NULL;

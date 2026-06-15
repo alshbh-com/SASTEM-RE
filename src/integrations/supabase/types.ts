@@ -105,7 +105,7 @@ export type Database = {
       }
       agent_daily_closings: {
         Row: {
-          agent_id: string
+          agent_id: string | null
           balance: number | null
           closed_by: string | null
           closed_by_username: string | null
@@ -119,7 +119,7 @@ export type Database = {
           total_paid: number | null
         }
         Insert: {
-          agent_id: string
+          agent_id?: string | null
           balance?: number | null
           closed_by?: string | null
           closed_by_username?: string | null
@@ -133,7 +133,7 @@ export type Database = {
           total_paid?: number | null
         }
         Update: {
-          agent_id?: string
+          agent_id?: string | null
           balance?: number | null
           closed_by?: string | null
           closed_by_username?: string | null
