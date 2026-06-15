@@ -121,35 +121,19 @@ const Products = () => {
         productId = newProduct.id;
       }
 
-      // Upload additional images to product_images table
+      // Upload additional images to imgBB then save to product_images table
       if (additionalImages.length > 0) {
-        const imageUploads = additionalImages.map(async (file, index) => {
-          const fileExt = file.name.split('.').pop();
-          const fileName = `${Math.random()}.${fileExt}`;
-          
-          const { error: uploadError } = await supabase.storage
-            .from('products')
-            .upload(fileName, file);
-          
-          if (uploadError) throw uploadError;
-          
-          const { data: { publicUrl } } = supabase.storage
-            .from('products')
-            .getPublicUrl(fileName);
-          
-          return {
-            product_id: productId,
-            image_url: publicUrl,
-            display_order: index + 1
-          };
-        });
+        const uploaded = await uploadMultipleImagesToImgBB(additionalImages);
+        const imageData = uploaded.map((res, index) => ({
+          product_id: productId,
+          image_url: res.display_url || res.url,
+          display_order: index + 1
+        }));
 
-        const imageData = await Promise.all(imageUploads);
-        
         const { error: imagesError } = await supabase
           .from('product_images')
           .insert(imageData);
-        
+
         if (imagesError) throw imagesError;
       }
     },
