@@ -82,15 +82,13 @@ const Offices = () => {
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const fileName = `office-logos/${Date.now()}-${file.name}`;
-    const { data, error } = await supabase.storage.from("products").upload(fileName, file);
-    if (error) {
-      toast.error("فشل رفع الصورة");
-      return;
+    try {
+      const result = await uploadImageToImgBB(file);
+      setForm(prev => ({ ...prev, logo_url: result.display_url || result.url }));
+      toast.success("تم رفع اللوجو");
+    } catch (err: any) {
+      toast.error(err?.message || "فشل رفع الصورة");
     }
-    const { data: urlData } = supabase.storage.from("products").getPublicUrl(fileName);
-    setForm(prev => ({ ...prev, logo_url: urlData.publicUrl }));
-    toast.success("تم رفع اللوجو");
   };
 
   if (isLoading) return <div className="p-8">جاري التحميل...</div>;
