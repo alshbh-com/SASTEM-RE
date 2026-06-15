@@ -62,7 +62,7 @@ export const findOrderByCode = async (rawCode: string) => {
         delivery_agents (id, name),
         governorates (name)
       `)
-      .eq("order_number", parseInt(numeric))
+      .eq("order_number", numeric)
       .maybeSingle();
     if (byNumber) return byNumber;
   }
