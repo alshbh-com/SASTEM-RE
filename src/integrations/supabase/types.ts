@@ -107,6 +107,7 @@ export type Database = {
         Row: {
           agent_id: string
           balance: number | null
+          closed_by: string | null
           closing_date: string
           created_at: string
           delivery_agent_id: string | null
@@ -119,6 +120,7 @@ export type Database = {
         Insert: {
           agent_id: string
           balance?: number | null
+          closed_by?: string | null
           closing_date?: string
           created_at?: string
           delivery_agent_id?: string | null
@@ -131,6 +133,7 @@ export type Database = {
         Update: {
           agent_id?: string
           balance?: number | null
+          closed_by?: string | null
           closing_date?: string
           created_at?: string
           delivery_agent_id?: string | null
@@ -171,6 +174,8 @@ export type Database = {
           payment_type: string | null
           status: string | null
           type: string
+          user_id: string | null
+          username: string | null
         }
         Insert: {
           agent_id?: string | null
@@ -185,6 +190,8 @@ export type Database = {
           payment_type?: string | null
           status?: string | null
           type?: string
+          user_id?: string | null
+          username?: string | null
         }
         Update: {
           agent_id?: string | null
@@ -199,6 +206,8 @@ export type Database = {
           payment_type?: string | null
           status?: string | null
           type?: string
+          user_id?: string | null
+          username?: string | null
         }
         Relationships: [
           {
@@ -230,18 +239,24 @@ export type Database = {
           data: Json | null
           event_type: string
           id: string
+          product_id: string | null
+          quantity: number | null
         }
         Insert: {
           created_at?: string
           data?: Json | null
           event_type: string
           id?: string
+          product_id?: string | null
+          quantity?: number | null
         }
         Update: {
           created_at?: string
           data?: Json | null
           event_type?: string
           id?: string
+          product_id?: string | null
+          quantity?: number | null
         }
         Relationships: []
       }
@@ -323,9 +338,12 @@ export type Database = {
           description: string | null
           id: string
           payment_method: string
+          reason: string | null
           reference_id: string | null
           reference_type: string | null
           type: string
+          user_id: string | null
+          username: string | null
         }
         Insert: {
           amount?: number
@@ -335,9 +353,12 @@ export type Database = {
           description?: string | null
           id?: string
           payment_method?: string
+          reason?: string | null
           reference_id?: string | null
           reference_type?: string | null
           type?: string
+          user_id?: string | null
+          username?: string | null
         }
         Update: {
           amount?: number
@@ -347,9 +368,12 @@ export type Database = {
           description?: string | null
           id?: string
           payment_method?: string
+          reason?: string | null
           reference_id?: string | null
           reference_type?: string | null
           type?: string
+          user_id?: string | null
+          username?: string | null
         }
         Relationships: [
           {
@@ -521,6 +545,7 @@ export type Database = {
           name: string
           phone: string | null
           updated_at: string
+          watermark_name: string | null
           watermark_url: string | null
         }
         Insert: {
@@ -533,6 +558,7 @@ export type Database = {
           name: string
           phone?: string | null
           updated_at?: string
+          watermark_name?: string | null
           watermark_url?: string | null
         }
         Update: {
@@ -545,6 +571,7 @@ export type Database = {
           name?: string
           phone?: string | null
           updated_at?: string
+          watermark_name?: string | null
           watermark_url?: string | null
         }
         Relationships: []
@@ -628,6 +655,7 @@ export type Database = {
           id: string
           notes: string | null
           office_id: string | null
+          order_details: string | null
           order_number: string | null
           payment_date: string | null
           payment_method: string | null
@@ -658,6 +686,7 @@ export type Database = {
           id?: string
           notes?: string | null
           office_id?: string | null
+          order_details?: string | null
           order_number?: string | null
           payment_date?: string | null
           payment_method?: string | null
@@ -688,6 +717,7 @@ export type Database = {
           id?: string
           notes?: string | null
           office_id?: string | null
+          order_details?: string | null
           order_number?: string | null
           payment_date?: string | null
           payment_method?: string | null
@@ -904,8 +934,10 @@ export type Database = {
           agent_id: string | null
           amount: number | null
           created_at: string
+          customer_id: string | null
           delivery_agent_id: string | null
           id: string
+          notes: string | null
           order_id: string
           reason: string | null
           return_amount: number | null
@@ -916,8 +948,10 @@ export type Database = {
           agent_id?: string | null
           amount?: number | null
           created_at?: string
+          customer_id?: string | null
           delivery_agent_id?: string | null
           id?: string
+          notes?: string | null
           order_id: string
           reason?: string | null
           return_amount?: number | null
@@ -928,8 +962,10 @@ export type Database = {
           agent_id?: string | null
           amount?: number | null
           created_at?: string
+          customer_id?: string | null
           delivery_agent_id?: string | null
           id?: string
+          notes?: string | null
           order_id?: string
           reason?: string | null
           return_amount?: number | null
@@ -942,6 +978,13 @@ export type Database = {
             columns: ["agent_id"]
             isOneToOne: false
             referencedRelation: "delivery_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "returns_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
             referencedColumns: ["id"]
           },
           {
@@ -1065,6 +1108,8 @@ export type Database = {
           status: string | null
           total_scanned: number | null
           updated_at: string
+          user_id: string | null
+          username: string | null
         }
         Insert: {
           created_at?: string
@@ -1074,6 +1119,8 @@ export type Database = {
           status?: string | null
           total_scanned?: number | null
           updated_at?: string
+          user_id?: string | null
+          username?: string | null
         }
         Update: {
           created_at?: string
@@ -1083,6 +1130,8 @@ export type Database = {
           status?: string | null
           total_scanned?: number | null
           updated_at?: string
+          user_id?: string | null
+          username?: string | null
         }
         Relationships: []
       }
@@ -1091,24 +1140,33 @@ export type Database = {
           created_at: string
           data: Json | null
           id: string
+          last_reset: string | null
           metric: string | null
           period: string | null
+          total_orders: number | null
+          total_sales: number | null
           value: number | null
         }
         Insert: {
           created_at?: string
           data?: Json | null
           id?: string
+          last_reset?: string | null
           metric?: string | null
           period?: string | null
+          total_orders?: number | null
+          total_sales?: number | null
           value?: number | null
         }
         Update: {
           created_at?: string
           data?: Json | null
           id?: string
+          last_reset?: string | null
           metric?: string | null
           period?: string | null
+          total_orders?: number | null
+          total_sales?: number | null
           value?: number | null
         }
         Relationships: []
@@ -1136,31 +1194,46 @@ export type Database = {
       }
       treasury: {
         Row: {
+          amount: number | null
           balance: number
           created_at: string
+          description: string | null
           id: string
           last_updated: string
           name: string
           office_id: string | null
+          type: string | null
           updated_at: string
+          user_id: string | null
+          username: string | null
         }
         Insert: {
+          amount?: number | null
           balance?: number
           created_at?: string
+          description?: string | null
           id?: string
           last_updated?: string
           name?: string
           office_id?: string | null
+          type?: string | null
           updated_at?: string
+          user_id?: string | null
+          username?: string | null
         }
         Update: {
+          amount?: number | null
           balance?: number
           created_at?: string
+          description?: string | null
           id?: string
           last_updated?: string
           name?: string
           office_id?: string | null
+          type?: string | null
           updated_at?: string
+          user_id?: string | null
+          username?: string | null
         }
         Relationships: [
           {
@@ -1178,6 +1251,7 @@ export type Database = {
     }
     Functions: {
       delete_old_activity_logs: { Args: never; Returns: number }
+      reset_order_sequence: { Args: never; Returns: undefined }
     }
     Enums: {
       [_ in never]: never
