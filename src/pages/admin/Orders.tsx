@@ -158,7 +158,7 @@ const Orders = () => {
       const { data: ordersToAssign, error: fetchError } = await supabase
         .from("orders")
         .select("id, governorate_id")
-        .in("order_number", orderNumbersAsInt);
+        .in("order_number", orderNumbersAsInt.map(String));
       
       if (fetchError) throw fetchError;
       
