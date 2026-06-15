@@ -108,6 +108,7 @@ export type Database = {
           agent_id: string
           balance: number | null
           closed_by: string | null
+          closed_by_username: string | null
           closing_date: string
           created_at: string
           delivery_agent_id: string | null
@@ -121,6 +122,7 @@ export type Database = {
           agent_id: string
           balance?: number | null
           closed_by?: string | null
+          closed_by_username?: string | null
           closing_date?: string
           created_at?: string
           delivery_agent_id?: string | null
@@ -134,6 +136,7 @@ export type Database = {
           agent_id?: string
           balance?: number | null
           closed_by?: string | null
+          closed_by_username?: string | null
           closing_date?: string
           created_at?: string
           delivery_agent_id?: string | null
@@ -653,6 +656,7 @@ export type Database = {
           discount: number | null
           governorate_id: string | null
           id: string
+          modified_amount: number | null
           notes: string | null
           office_id: string | null
           order_details: string | null
@@ -684,6 +688,7 @@ export type Database = {
           discount?: number | null
           governorate_id?: string | null
           id?: string
+          modified_amount?: number | null
           notes?: string | null
           office_id?: string | null
           order_details?: string | null
@@ -715,6 +720,7 @@ export type Database = {
           discount?: number | null
           governorate_id?: string | null
           id?: string
+          modified_amount?: number | null
           notes?: string | null
           office_id?: string | null
           order_details?: string | null
@@ -1103,6 +1109,7 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
+          ended_at: string | null
           id: string
           session_name: string | null
           status: string | null
@@ -1114,6 +1121,7 @@ export type Database = {
         Insert: {
           created_at?: string
           created_by?: string | null
+          ended_at?: string | null
           id?: string
           session_name?: string | null
           status?: string | null
@@ -1125,6 +1133,7 @@ export type Database = {
         Update: {
           created_at?: string
           created_by?: string | null
+          ended_at?: string | null
           id?: string
           session_name?: string | null
           status?: string | null
@@ -1196,7 +1205,9 @@ export type Database = {
         Row: {
           amount: number | null
           balance: number
+          category: string | null
           created_at: string
+          created_by: string | null
           description: string | null
           id: string
           last_updated: string
@@ -1210,7 +1221,9 @@ export type Database = {
         Insert: {
           amount?: number | null
           balance?: number
+          category?: string | null
           created_at?: string
+          created_by?: string | null
           description?: string | null
           id?: string
           last_updated?: string
@@ -1224,7 +1237,9 @@ export type Database = {
         Update: {
           amount?: number | null
           balance?: number
+          category?: string | null
           created_at?: string
+          created_by?: string | null
           description?: string | null
           id?: string
           last_updated?: string
