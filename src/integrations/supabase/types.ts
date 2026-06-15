@@ -14,515 +14,1094 @@ export type Database = {
   }
   public: {
     Tables: {
-      "activity_logs_rows.csv": {
+      activity_logs: {
         Row: {
-          action: string | null
-          created_at: string | null
+          action: string
+          created_at: string
           details: string | null
-          id: string | null
+          id: string
           section: string | null
           user_id: string | null
           username: string | null
         }
         Insert: {
-          action?: string | null
-          created_at?: string | null
+          action: string
+          created_at?: string
           details?: string | null
-          id?: string | null
+          id?: string
           section?: string | null
           user_id?: string | null
           username?: string | null
         }
         Update: {
-          action?: string | null
-          created_at?: string | null
+          action?: string
+          created_at?: string
           details?: string | null
-          id?: string | null
+          id?: string
           section?: string | null
           user_id?: string | null
           username?: string | null
         }
         Relationships: []
       }
-      "admin_user_permissions_rows.csv": {
+      admin_user_permissions: {
         Row: {
-          created_at: string | null
-          id: string | null
-          permission: string | null
-          permission_type: string | null
-          user_id: string | null
+          created_at: string
+          id: string
+          permission: string
+          permission_type: string
+          user_id: string
         }
         Insert: {
-          created_at?: string | null
-          id?: string | null
-          permission?: string | null
-          permission_type?: string | null
-          user_id?: string | null
+          created_at?: string
+          id?: string
+          permission: string
+          permission_type?: string
+          user_id: string
         }
         Update: {
-          created_at?: string | null
-          id?: string | null
-          permission?: string | null
-          permission_type?: string | null
-          user_id?: string | null
+          created_at?: string
+          id?: string
+          permission?: string
+          permission_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_user_permissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "admin_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      admin_users: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          password: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          password: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          password?: string
+          updated_at?: string
+          username?: string
         }
         Relationships: []
       }
-      admin_users_rows: {
+      agent_daily_closings: {
         Row: {
-          created_at: string | null
-          id: string | null
-          is_active: boolean | null
-          password: number | null
-          updated_at: string | null
-          username: string | null
+          agent_id: string
+          balance: number | null
+          closing_date: string
+          created_at: string
+          id: string
+          notes: string | null
+          total_collected: number | null
+          total_paid: number | null
         }
         Insert: {
-          created_at?: string | null
-          id?: string | null
-          is_active?: boolean | null
-          password?: number | null
-          updated_at?: string | null
-          username?: string | null
+          agent_id: string
+          balance?: number | null
+          closing_date?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          total_collected?: number | null
+          total_paid?: number | null
         }
         Update: {
-          created_at?: string | null
-          id?: string | null
-          is_active?: boolean | null
-          password?: number | null
-          updated_at?: string | null
-          username?: string | null
+          agent_id?: string
+          balance?: number | null
+          closing_date?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          total_collected?: number | null
+          total_paid?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_daily_closings_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_payments: {
+        Row: {
+          agent_id: string | null
+          agent_shipping_cost: number | null
+          amount: number
+          created_at: string
+          id: string
+          notes: string | null
+          order_id: string | null
+          payment_date: string | null
+          status: string | null
+          type: string
+        }
+        Insert: {
+          agent_id?: string | null
+          agent_shipping_cost?: number | null
+          amount?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          payment_date?: string | null
+          status?: string | null
+          type?: string
+        }
+        Update: {
+          agent_id?: string | null
+          agent_shipping_cost?: number | null
+          amount?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          order_id?: string | null
+          payment_date?: string | null
+          status?: string | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_payments_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      analytics_events: {
+        Row: {
+          created_at: string
+          data: Json | null
+          event_type: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          event_type: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          event_type?: string
+          id?: string
         }
         Relationships: []
       }
-      "app_settings_rows.csv": {
+      app_settings: {
         Row: {
           active_template: string | null
           active_theme: string | null
-          created_at: string | null
-          id: string | null
+          created_at: string
+          id: string
           invoice_name: string | null
           logo_url: string | null
-          platform_name: string | null
-          updated_at: string | null
+          platform_name: string
+          updated_at: string
           watermark_name: string | null
         }
         Insert: {
           active_template?: string | null
           active_theme?: string | null
-          created_at?: string | null
-          id?: string | null
+          created_at?: string
+          id?: string
           invoice_name?: string | null
           logo_url?: string | null
-          platform_name?: string | null
-          updated_at?: string | null
+          platform_name?: string
+          updated_at?: string
           watermark_name?: string | null
         }
         Update: {
           active_template?: string | null
           active_theme?: string | null
-          created_at?: string | null
-          id?: string | null
+          created_at?: string
+          id?: string
           invoice_name?: string | null
           logo_url?: string | null
-          platform_name?: string | null
-          updated_at?: string | null
+          platform_name?: string
+          updated_at?: string
           watermark_name?: string | null
         }
         Relationships: []
       }
-      "cashbox_rows.csv": {
+      cashbox: {
         Row: {
-          created_at: string | null
+          cashbox_date: string | null
+          created_at: string
           created_by: string | null
-          id: string | null
-          is_active: boolean | null
-          name: string | null
-          opening_balance: number | null
-          updated_at: string | null
+          id: string
+          is_active: boolean
+          name: string
+          opening_balance: number
+          updated_at: string
         }
         Insert: {
-          created_at?: string | null
+          cashbox_date?: string | null
+          created_at?: string
           created_by?: string | null
-          id?: string | null
-          is_active?: boolean | null
-          name?: string | null
-          opening_balance?: number | null
-          updated_at?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          opening_balance?: number
+          updated_at?: string
         }
         Update: {
-          created_at?: string | null
+          cashbox_date?: string | null
+          created_at?: string
           created_by?: string | null
-          id?: string | null
-          is_active?: boolean | null
-          name?: string | null
-          opening_balance?: number | null
-          updated_at?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          opening_balance?: number
+          updated_at?: string
         }
         Relationships: []
       }
-      "categories_rows.csv": {
+      cashbox_transactions: {
         Row: {
-          created_at: string | null
+          amount: number
+          cashbox_id: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          payment_method: string
+          reference_id: string | null
+          reference_type: string | null
+          type: string
+        }
+        Insert: {
+          amount?: number
+          cashbox_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          payment_method?: string
+          reference_id?: string | null
+          reference_type?: string | null
+          type?: string
+        }
+        Update: {
+          amount?: number
+          cashbox_id?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          payment_method?: string
+          reference_id?: string | null
+          reference_type?: string | null
+          type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cashbox_transactions_cashbox_id_fkey"
+            columns: ["cashbox_id"]
+            isOneToOne: false
+            referencedRelation: "cashbox"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      categories: {
+        Row: {
+          created_at: string
           description: string | null
           display_order: number | null
-          id: string | null
+          id: string
           image_url: string | null
-          is_active: boolean | null
-          name: string | null
-          updated_at: string | null
+          is_active: boolean
+          name: string
+          updated_at: string
         }
         Insert: {
-          created_at?: string | null
+          created_at?: string
           description?: string | null
           display_order?: number | null
-          id?: string | null
+          id?: string
           image_url?: string | null
-          is_active?: boolean | null
-          name?: string | null
-          updated_at?: string | null
+          is_active?: boolean
+          name: string
+          updated_at?: string
         }
         Update: {
-          created_at?: string | null
+          created_at?: string
           description?: string | null
           display_order?: number | null
-          id?: string | null
+          id?: string
           image_url?: string | null
-          is_active?: boolean | null
-          name?: string | null
-          updated_at?: string | null
+          is_active?: boolean
+          name?: string
+          updated_at?: string
         }
         Relationships: []
       }
-      "customers_rows.csv": {
+      customers: {
         Row: {
           address: string | null
-          created_at: string | null
+          created_at: string
           governorate: string | null
           governorate_id: string | null
-          id: string | null
-          name: string | null
+          id: string
+          name: string
           notes: string | null
-          phone: number | null
+          phone: string
           phone2: string | null
-          updated_at: string | null
+          updated_at: string
         }
         Insert: {
           address?: string | null
-          created_at?: string | null
+          created_at?: string
           governorate?: string | null
           governorate_id?: string | null
-          id?: string | null
-          name?: string | null
+          id?: string
+          name: string
           notes?: string | null
-          phone?: number | null
+          phone: string
           phone2?: string | null
-          updated_at?: string | null
+          updated_at?: string
         }
         Update: {
           address?: string | null
-          created_at?: string | null
+          created_at?: string
           governorate?: string | null
           governorate_id?: string | null
-          id?: string | null
-          name?: string | null
+          id?: string
+          name?: string
           notes?: string | null
-          phone?: number | null
+          phone?: string
           phone2?: string | null
-          updated_at?: string | null
+          updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "customers_governorate_id_fkey"
+            columns: ["governorate_id"]
+            isOneToOne: false
+            referencedRelation: "governorates"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      "governorates_rows.csv": {
+      delivery_agents: {
         Row: {
-          agent_shipping_cost: number | null
-          created_at: string | null
-          id: string | null
-          name: string | null
-          shipping_cost: number | null
-          updated_at: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          phone: string | null
+          updated_at: string
         }
         Insert: {
-          agent_shipping_cost?: number | null
-          created_at?: string | null
-          id?: string | null
-          name?: string | null
-          shipping_cost?: number | null
-          updated_at?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          phone?: string | null
+          updated_at?: string
         }
         Update: {
-          agent_shipping_cost?: number | null
-          created_at?: string | null
-          id?: string | null
-          name?: string | null
-          shipping_cost?: number | null
-          updated_at?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          phone?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
-      "meta_settings_rows.csv": {
+      governorates: {
         Row: {
-          access_token: string | null
-          id: string | null
-          pixel_id: number | null
-          test_event_code: string | null
-          updated_at: string | null
+          agent_shipping_cost: number
+          created_at: string
+          display_order: number | null
+          id: string
+          is_active: boolean
+          name: string
+          shipping_cost: number
+          updated_at: string
         }
         Insert: {
-          access_token?: string | null
-          id?: string | null
-          pixel_id?: number | null
-          test_event_code?: string | null
-          updated_at?: string | null
+          agent_shipping_cost?: number
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_active?: boolean
+          name: string
+          shipping_cost?: number
+          updated_at?: string
         }
         Update: {
-          access_token?: string | null
-          id?: string | null
-          pixel_id?: number | null
-          test_event_code?: string | null
-          updated_at?: string | null
+          agent_shipping_cost?: number
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          shipping_cost?: number
+          updated_at?: string
         }
         Relationships: []
       }
-      "order_items_rows.csv": {
+      offices: {
+        Row: {
+          address: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          is_default: boolean
+          logo_url: string | null
+          name: string
+          phone: string | null
+          updated_at: string
+          watermark_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          logo_url?: string | null
+          name: string
+          phone?: string | null
+          updated_at?: string
+          watermark_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          logo_url?: string | null
+          name?: string
+          phone?: string | null
+          updated_at?: string
+          watermark_url?: string | null
+        }
+        Relationships: []
+      }
+      order_items: {
         Row: {
           color: string | null
-          created_at: string | null
-          id: string | null
-          order_id: string | null
-          price: number | null
-          product_details: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          order_id: string
+          price: number
           product_id: string | null
-          quantity: number | null
+          product_name: string
+          quantity: number
           size: string | null
+          variant_id: string | null
         }
         Insert: {
           color?: string | null
-          created_at?: string | null
-          id?: string | null
-          order_id?: string | null
-          price?: number | null
-          product_details?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          order_id: string
+          price?: number
           product_id?: string | null
-          quantity?: number | null
+          product_name: string
+          quantity?: number
           size?: string | null
+          variant_id?: string | null
         }
         Update: {
           color?: string | null
-          created_at?: string | null
-          id?: string | null
-          order_id?: string | null
-          price?: number | null
-          product_details?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          order_id?: string
+          price?: number
           product_id?: string | null
-          quantity?: number | null
+          product_name?: string
+          quantity?: number
           size?: string | null
+          variant_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      "orders_rows.csv": {
+      orders: {
         Row: {
-          agent_shipping_cost: number | null
+          agent_deleted: boolean
+          agent_shipping_cost: number
           assigned_at: string | null
           barcode_value: string | null
-          created_at: string | null
+          created_at: string
+          customer_address: string | null
+          customer_governorate: string | null
           customer_id: string | null
+          customer_name: string | null
+          customer_phone: string | null
+          customer_phone2: string | null
           delivery_agent_id: string | null
-          discount: number | null
           governorate_id: string | null
-          id: string | null
-          modified_amount: number | null
+          id: string
           notes: string | null
           office_id: string | null
-          order_details: string | null
-          order_number: number | null
+          order_number: string | null
           payment_date: string | null
+          payment_method: string | null
           qr_value: string | null
-          shipping_cost: number | null
-          status: string | null
-          total_amount: number | null
+          shipping_cost: number
+          status: string
+          subtotal: number
+          total: number
           tracking_code: string | null
-          updated_at: string | null
+          updated_at: string
         }
         Insert: {
-          agent_shipping_cost?: number | null
+          agent_deleted?: boolean
+          agent_shipping_cost?: number
           assigned_at?: string | null
           barcode_value?: string | null
-          created_at?: string | null
+          created_at?: string
+          customer_address?: string | null
+          customer_governorate?: string | null
           customer_id?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          customer_phone2?: string | null
           delivery_agent_id?: string | null
-          discount?: number | null
           governorate_id?: string | null
-          id?: string | null
-          modified_amount?: number | null
+          id?: string
           notes?: string | null
           office_id?: string | null
-          order_details?: string | null
-          order_number?: number | null
+          order_number?: string | null
           payment_date?: string | null
+          payment_method?: string | null
           qr_value?: string | null
-          shipping_cost?: number | null
-          status?: string | null
-          total_amount?: number | null
+          shipping_cost?: number
+          status?: string
+          subtotal?: number
+          total?: number
           tracking_code?: string | null
-          updated_at?: string | null
+          updated_at?: string
         }
         Update: {
-          agent_shipping_cost?: number | null
+          agent_deleted?: boolean
+          agent_shipping_cost?: number
           assigned_at?: string | null
           barcode_value?: string | null
-          created_at?: string | null
+          created_at?: string
+          customer_address?: string | null
+          customer_governorate?: string | null
           customer_id?: string | null
+          customer_name?: string | null
+          customer_phone?: string | null
+          customer_phone2?: string | null
           delivery_agent_id?: string | null
-          discount?: number | null
           governorate_id?: string | null
-          id?: string | null
-          modified_amount?: number | null
+          id?: string
           notes?: string | null
           office_id?: string | null
-          order_details?: string | null
-          order_number?: number | null
+          order_number?: string | null
           payment_date?: string | null
+          payment_method?: string | null
           qr_value?: string | null
-          shipping_cost?: number | null
-          status?: string | null
-          total_amount?: number | null
+          shipping_cost?: number
+          status?: string
+          subtotal?: number
+          total?: number
           tracking_code?: string | null
-          updated_at?: string | null
+          updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "customers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_delivery_agent_id_fkey"
+            columns: ["delivery_agent_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_governorate_id_fkey"
+            columns: ["governorate_id"]
+            isOneToOne: false
+            referencedRelation: "governorates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_office_id_fkey"
+            columns: ["office_id"]
+            isOneToOne: false
+            referencedRelation: "offices"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      "products_rows.csv": {
+      product_color_variants: {
+        Row: {
+          color: string
+          color_hex: string | null
+          created_at: string
+          id: string
+          image_url: string | null
+          product_id: string
+          stock: number | null
+        }
+        Insert: {
+          color: string
+          color_hex?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          product_id: string
+          stock?: number | null
+        }
+        Update: {
+          color?: string
+          color_hex?: string | null
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          product_id?: string
+          stock?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_color_variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_images: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          image_url: string
+          product_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url: string
+          product_id: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          image_url?: string
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_images_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      products: {
         Row: {
           category_id: string | null
-          color_options: string | null
-          created_at: string | null
+          created_at: string
           description: string | null
           details: string | null
-          id: string | null
+          id: string
           image_url: string | null
-          is_active: boolean | null
-          is_offer: boolean | null
-          name: string | null
+          is_active: boolean
+          is_offer: boolean
+          name: string
           offer_price: number | null
-          price: number | null
-          quantity_pricing: Json | null
-          size_options: Json | null
-          stock: number | null
-          updated_at: string | null
+          price: number
+          price_10: number | null
+          price_11: number | null
+          price_12: number | null
+          price_2: number | null
+          price_3: number | null
+          price_4: number | null
+          price_5: number | null
+          price_6: number | null
+          price_7: number | null
+          price_8: number | null
+          price_9: number | null
+          stock: number
+          updated_at: string
         }
         Insert: {
           category_id?: string | null
-          color_options?: string | null
-          created_at?: string | null
+          created_at?: string
           description?: string | null
           details?: string | null
-          id?: string | null
+          id?: string
           image_url?: string | null
-          is_active?: boolean | null
-          is_offer?: boolean | null
-          name?: string | null
+          is_active?: boolean
+          is_offer?: boolean
+          name: string
           offer_price?: number | null
-          price?: number | null
-          quantity_pricing?: Json | null
-          size_options?: Json | null
-          stock?: number | null
-          updated_at?: string | null
+          price?: number
+          price_10?: number | null
+          price_11?: number | null
+          price_12?: number | null
+          price_2?: number | null
+          price_3?: number | null
+          price_4?: number | null
+          price_5?: number | null
+          price_6?: number | null
+          price_7?: number | null
+          price_8?: number | null
+          price_9?: number | null
+          stock?: number
+          updated_at?: string
         }
         Update: {
           category_id?: string | null
-          color_options?: string | null
-          created_at?: string | null
+          created_at?: string
           description?: string | null
           details?: string | null
-          id?: string | null
+          id?: string
           image_url?: string | null
-          is_active?: boolean | null
-          is_offer?: boolean | null
-          name?: string | null
+          is_active?: boolean
+          is_offer?: boolean
+          name?: string
           offer_price?: number | null
-          price?: number | null
-          quantity_pricing?: Json | null
-          size_options?: Json | null
-          stock?: number | null
-          updated_at?: string | null
+          price?: number
+          price_10?: number | null
+          price_11?: number | null
+          price_12?: number | null
+          price_2?: number | null
+          price_3?: number | null
+          price_4?: number | null
+          price_5?: number | null
+          price_6?: number | null
+          price_7?: number | null
+          price_8?: number | null
+          price_9?: number | null
+          stock?: number
+          updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      "scan_sessions_rows.csv": {
+      returns: {
         Row: {
-          ended_at: string | null
-          id: string | null
-          started_at: string | null
-          status: string | null
-          total_scanned: number | null
+          agent_id: string | null
+          amount: number | null
+          created_at: string
+          id: string
+          order_id: string
+          reason: string | null
+          returned_at: string
+        }
+        Insert: {
+          agent_id?: string | null
+          amount?: number | null
+          created_at?: string
+          id?: string
+          order_id: string
+          reason?: string | null
+          returned_at?: string
+        }
+        Update: {
+          agent_id?: string | null
+          amount?: number | null
+          created_at?: string
+          id?: string
+          order_id?: string
+          reason?: string | null
+          returned_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "returns_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "returns_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scan_logs: {
+        Row: {
+          action: string | null
+          barcode_value: string | null
+          created_at: string
+          id: string
+          new_value: string | null
+          order_id: string | null
+          result: string | null
+          scanned_at: string
+          session_id: string | null
           user_id: string | null
           username: string | null
         }
         Insert: {
-          ended_at?: string | null
-          id?: string | null
-          started_at?: string | null
-          status?: string | null
-          total_scanned?: number | null
+          action?: string | null
+          barcode_value?: string | null
+          created_at?: string
+          id?: string
+          new_value?: string | null
+          order_id?: string | null
+          result?: string | null
+          scanned_at?: string
+          session_id?: string | null
           user_id?: string | null
           username?: string | null
         }
         Update: {
-          ended_at?: string | null
-          id?: string | null
-          started_at?: string | null
-          status?: string | null
-          total_scanned?: number | null
+          action?: string | null
+          barcode_value?: string | null
+          created_at?: string
+          id?: string
+          new_value?: string | null
+          order_id?: string | null
+          result?: string | null
+          scanned_at?: string
+          session_id?: string | null
           user_id?: string | null
           username?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "scan_logs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scan_logs_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "scan_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      "statistics_rows.csv": {
+      scan_session_items: {
         Row: {
-          created_at: string | null
-          id: string | null
-          last_reset: string | null
-          total_orders: number | null
-          total_sales: number | null
-          updated_at: string | null
+          barcode_value: string | null
+          id: string
+          order_id: string | null
+          scanned_at: string
+          session_id: string
         }
         Insert: {
-          created_at?: string | null
-          id?: string | null
-          last_reset?: string | null
-          total_orders?: number | null
-          total_sales?: number | null
-          updated_at?: string | null
+          barcode_value?: string | null
+          id?: string
+          order_id?: string | null
+          scanned_at?: string
+          session_id: string
         }
         Update: {
-          created_at?: string | null
-          id?: string | null
-          last_reset?: string | null
-          total_orders?: number | null
-          total_sales?: number | null
-          updated_at?: string | null
+          barcode_value?: string | null
+          id?: string
+          order_id?: string | null
+          scanned_at?: string
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scan_session_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scan_session_items_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "scan_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scan_sessions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          session_name: string | null
+          status: string | null
+          total_scanned: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          session_name?: string | null
+          status?: string | null
+          total_scanned?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          session_name?: string | null
+          status?: string | null
+          total_scanned?: number | null
+          updated_at?: string
         }
         Relationships: []
       }
-      "system_passwords_rows.csv": {
+      statistics: {
         Row: {
-          id: string | null
-          password: number | null
-          updated_at: string | null
+          created_at: string
+          data: Json | null
+          id: string
+          metric: string | null
+          period: string | null
+          value: number | null
         }
         Insert: {
-          id?: string | null
-          password?: number | null
-          updated_at?: string | null
+          created_at?: string
+          data?: Json | null
+          id?: string
+          metric?: string | null
+          period?: string | null
+          value?: number | null
         }
         Update: {
-          id?: string | null
-          password?: number | null
-          updated_at?: string | null
+          created_at?: string
+          data?: Json | null
+          id?: string
+          metric?: string | null
+          period?: string | null
+          value?: number | null
         }
         Relationships: []
+      }
+      system_passwords: {
+        Row: {
+          id: string
+          key: string
+          password: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          key: string
+          password: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          key?: string
+          password?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      treasury: {
+        Row: {
+          balance: number
+          created_at: string
+          id: string
+          last_updated: string
+          name: string
+          office_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          balance?: number
+          created_at?: string
+          id?: string
+          last_updated?: string
+          name?: string
+          office_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          balance?: number
+          created_at?: string
+          id?: string
+          last_updated?: string
+          name?: string
+          office_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "treasury_office_id_fkey"
+            columns: ["office_id"]
+            isOneToOne: false
+            referencedRelation: "offices"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
