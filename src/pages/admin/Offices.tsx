@@ -11,6 +11,7 @@ import { ArrowLeft, Plus, Trash2, Edit2, Building2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAdminAuth } from "@/contexts/AdminAuthContext";
+import { uploadImageToImgBB } from "@/lib/imageUpload";
 
 const Offices = () => {
   const navigate = useNavigate();
