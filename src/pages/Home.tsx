@@ -33,8 +33,10 @@ const Home = () => {
     queryFn: async () => {
       let query = supabase
         .from("products")
-        .select(`*, categories(name), product_images(id, image_url, display_order)`)
-        .order("created_at", { ascending: false });
+        .select(`id, name, description, price, offer_price, is_offer, stock, image_url, details, category_id, created_at, product_images(id, image_url, display_order)`)
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+        .limit(200);
       if (selectedCategory !== "all") {
         query = query.eq("category_id", selectedCategory);
       }
@@ -43,6 +45,7 @@ const Home = () => {
       return data;
     },
   });
+
 
   const handleAddToCart = (product: any) => {
     if (product.stock <= 0) {
